@@ -1,3 +1,10 @@
+# [Echidna] Fuzzing test project
+```
+npm run fuzz
+```
+
+
+# Below is the original readme
 # Rock Paper Scissors DApp
 
 [//]: # (contest-details-open)
