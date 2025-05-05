@@ -27,3 +27,6 @@ notes.md
 
 # Invariant Tests
 test/RockPaperScissorsInvariant*.t.sol
+
+crytic-export
+echidna-corpus

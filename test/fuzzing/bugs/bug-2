@@ -1,0 +1,37 @@
+√ Title
+[C-01] A user might join more than once in a game and lose ether forever
+
+√ Invariant
+BAL-07: The sum of bets of games should be equal to the fund of contract
+
+√ Description
+`joinGameWithEth()` does not check if the game is already joined by another player which can end up with multiple players joining the same game.
+RockPaperScissors.sol#L154
+
+√ Impact
+If joinGameWithEth(gameId) is called 4 times, the only last user who joins the game will be considered as a player. The first, second and third users will lose their ether forever.
+It will be locked in the contract.
+
+√ Recommendation
+Check whether the game has two players. If it has, revert the transaction.
+
+√ PoC
+test/fuzzing/bugs/poc/bug-2.sol
+
+√ Steps to reproduce (Debug logs)
+ Call sequence:
+    Fuzz.createGame(1,4970715689593150148045461292206000543738330209009721444231,8523900832006971435588585263667069226057820900)
+    Fuzz.joinGame()
+    Fuzz.joinGame()
+    Fuzz.createGame(643,347774978847139000348567972077364661791696908989122495,128470247506985301638289124838130269295594230337133072)
+
+Traces: 
+call HEVM::prank(Properties_TIME) (/Users/kim/dev/2025-04-rock-paper-scissors/test/fuzzing/HandlerRockPaperScissors.sol:69)
+ └╴← 0x
+call 0xee35211C4D9126D520bBfeaf3cFee5FE7B86F221::createGameWithEth(643, 347774978847139000348567972077364661791696908989122495) (/Users/kim/dev/2025-04-rock-paper-scissors/test/fuzzing/HandlerRockPaperScissors.sol:70)
+ ├╴emit GameCreated(gameId=1, creator=Properties_TIME, bet=295594230337133072, totalTurns=643) <no source map>
+ └╴← (1)
+call Fuzzlib::gte(uint256,uint256,string)(295594230337133072, 10000000000000000, «BAL-01: A newly created game must have at least minimum bet ether») (/Users/kim/dev/2025-04-rock-paper-scissors/test/fuzzing/helper/RpsFuzzingHelper.sol:55)
+ └╴← 0x
+call 0xee35211C4D9126D520bBfeaf3cFee5FE7B86F221::gameCounter() (/Users/kim/dev/2025-04-rock-paper-scissors/test/fuzzing/PostCondition.sol:16)
+ └╴← (2)

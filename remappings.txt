@@ -1,2 +1,3 @@
 @openzeppelin/=lib/openzeppelin-contracts/
+@perimetersec/fuzzlib/src/=node_modules/@perimetersec/fuzzlib/src/
 forge-std/=lib/forge-std/src/
